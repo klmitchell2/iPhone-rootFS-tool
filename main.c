@@ -1,45 +1,58 @@
+#define RELEASE 2
+#define DEBUG 1
+
+#define ARRAY_SIZE(x) ( sizeof(x) / sizeof((x)[0]) )
+
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/stat.h>
 #include <zconf.h>
-#include "ios.h"
+#include "iLibX.h"
 
-int main() {
-    printf("iPhone rootFS Tool - DuffyAPP_IT\nEnsure All Prereqs Installed & Device Is Ready (ReadMe!)..\n");
-    printf("Sleeping for 5 seconds before dump..\n");
-    //sleep for 5 secs for user to stop exec if device isnt ready.
-    sleep(5);
-    printf("Checking for device access..");
-    //call fetch access function to ensure iphone tunnel is running properly.
-    if (ios_fetch_access("127.0.0.1","2222")==0){
-        printf("Connected!\n");
-        sleep(1);
-        //attempt remount. either result is fine.
-        printf("Remounting RootFS as r/w if it isnt already...\n");
-        if(ios_run_comm("mount -o rw,union,update / >/dev/null 2>/dev/null \; echo $?","alpine")==0) {
-            printf("Disk remounted succesfully!\n");
-        } else {
-            printf("Disk was already remounted!\n");
-        }
+void cleanmenu(int note, char *notedata){
+    system("clear");
+    printf("==================\niPhone-rootFS-tool for macOS v%d\nDebug is %d\n==================\nLICENSE [DUFFYAPPIT[FREE]]\n==================\n", RELEASE, DEBUG);
+    if (note !=0){
+        printf("%s\n==================\n", notedata);
+    }
+}
 
-        printf("Compressing rootFS!..\n");
-        printf("This can take a while, enough time to make a coffee or something!\n");
-        if(ios_run_comm("tar -zcf  /rootFS.tar.gz / >/dev/null 2>/dev/null \; echo $?","alpine")==0){
-            printf("Compression Complete. Receiving File To Mac.\n");
-            if(ios_rec_f("/rootFS.tar.gz","rootFS.tar.gz")==0){
-                printf("rootFS exported to rootFS.tar.gz\n");
-                ios_run_comm("rm /rootFS.tar.gz","alpine");
-            } else {
-                printf("Something went wrong.. Check your disk space on the mac and try again?\n");
-                ios_run_comm("rm /rootFS.tar.gz","alpine");
+int main(int argc, char *argv[]) {
+    cleanmenu(1, "Initialising");
+    system("rm -rf SENSETIVE");
+    if (mkdir("SENSETIVE", 0777) == -1) {
+        cleanmenu(0, "");
+        printf("PRE-EXEC Check Failed -\> SENSETIVE Directory Already Exists And May Contain User Data.\nBackup & Remove SENSETIVE Directory Appropriately Before Executing...\n");
+        exit(1);
+    } else {
+        cleanmenu(1, "Initialising");
+        if(macos_run_ge("iproxy test")==234){
+            printf("Starting Device Proxy\n");
+            if(macos_run_ge("iproxy 7788 44 &")==0){
+                printf("Started Device Proxy\n");
             }
         } else{
-            return 1;
+            printf("iProxy Not Found...Install Via Brew & Ensure PATH Entry\n");
+            exit(1);
         }
 
-
-    } else {
-        printf("Is iPhone Tunnel running?\n");
-        return 1;
+        //SENSETIVE Directory Created
+        //Check If AL Is In FirstLaunch State...
+        cleanmenu(1, "Initialising Connected Device...");
+        if (ios_fetch_access("127.0.0.1", "7788") == 0) {
+            //Tunnel To Device Is Open, Send Companion
+            if (DEBUG == 1) {
+                printf("Mounting iDevice Disk...\n");
+            }
+            ios_run_ge("mount -o rw,union,update /");
+            printf("Ready...\n");
+            printf("Dumping Connected Device In Current State.\nThis may take some time...\n");
+            system("resources/sshpass -p alpine ssh -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@127.0.0.1 -p7788 'tar zcf - / 2>/dev/null' | resources/pv > SENSETIVE/filesystem.tar");
+            printf("Success! filesystem.tar available in 'SENSETIVE/'\n");
+        } else{
+            printf("Stable Connection To Device Could Not Be Established.\n");
+        }
+        return 0;
     }
-
-    return 0;
 }

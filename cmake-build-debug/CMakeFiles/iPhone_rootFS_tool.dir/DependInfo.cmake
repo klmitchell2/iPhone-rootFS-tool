@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/Users/jamesduffy/Documents/GithubSync/iPhone-rootFS-tool/ios.c" "/Users/jamesduffy/Documents/GithubSync/iPhone-rootFS-tool/cmake-build-debug/CMakeFiles/activationBX.dir/ios.c.o"
-  "/Users/jamesduffy/Documents/GithubSync/iPhone-rootFS-tool/main.c" "/Users/jamesduffy/Documents/GithubSync/iPhone-rootFS-tool/cmake-build-debug/CMakeFiles/activationBX.dir/main.c.o"
+  "/Users/a010010/Documents/GitHub/iPhone-rootFS-tool/iLibX.c" "/Users/a010010/Documents/GitHub/iPhone-rootFS-tool/cmake-build-debug/CMakeFiles/iPhone_rootFS_tool.dir/iLibX.c.o"
+  "/Users/a010010/Documents/GitHub/iPhone-rootFS-tool/main.c" "/Users/a010010/Documents/GitHub/iPhone-rootFS-tool/cmake-build-debug/CMakeFiles/iPhone_rootFS_tool.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")
 
