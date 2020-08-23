@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
         exit(1);
     } else {
         cleanmenu(1, "Initialising");
-        if(macos_run_ge("iproxy test")==234){
+        if(macos_run_ge("which iproxy")==0){
             printf("Starting Device Proxy\n");
             if(macos_run_ge("iproxy 7788 44 &")==0){
                 printf("Started Device Proxy\n");
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
             printf("Ready...\n");
             printf("Dumping Connected Device In Current State.\nThis may take some time...\n");
             system("resources/sshpass -p alpine ssh -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@127.0.0.1 -p7788 'tar zcf - / 2>/dev/null' | resources/pv > SENSETIVE/filesystem.tar");
-            printf("Success! filesystem.tar available in 'SENSETIVE/'\n");
+            printf("Complete! filesystem.tar available in 'SENSETIVE/'\n");
         } else{
             printf("Stable Connection To Device Could Not Be Established.\n");
         }
