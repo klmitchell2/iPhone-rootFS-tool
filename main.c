@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
             if (DEBUG == 1) {
                 printf("Mounting iDevice Disk...\n");
             }
-            ios_run_ge("mount -o rw,union,update /");
+            ios_run_ge("mount -o rw,union,update /"); //Does the disk need to be remounted?
             printf("Ready...\n");
             printf("Dumping Connected Device In Current State.\nThis may take some time...\n");
             system("resources/sshpass -p alpine ssh -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@127.0.0.1 -p7788 'tar zcf - / 2>/dev/null' | resources/pv > SENSETIVE/filesystem.tar");
