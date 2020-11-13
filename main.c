@@ -17,7 +17,7 @@
 void clean_menu(int note, char *notedata) {
     system("clear");
     printf("==================\niPhone-rootFS-tool for macOS v%d\nDebug is %d\n==================\nLICENSE [DUFFYAPPIT[FREE]]\n==================\n", RELEASE, DEBUG);
-    if (note !=0){
+    if (note !=0) {
         printf("%s\n==================\n", notedata);
     }
 }
@@ -27,17 +27,17 @@ void dump_with_output_directory(char *outputDirectory) {
     system("rm -rf SENSITIVE");
     if (mkdir("SENSITIVE", 0777) == -1) {
         clean_menu(0, "");
-        printf("PRE-EXEC Check Failed -\> SENSETIVE Directory Already Exists And May Contain User Data.\nBackup & Remove SENSETIVE Directory Appropriately Before Executing...\n");
+        printf("[-] PRE-EXEC Check Failed -> SENSETIVE Directory Already Exists And May Contain User Data.\nBackup & Remove SENSETIVE Directory Appropriately Before Executing...\n");
         exit(1);
     } else {
         clean_menu(1, "Initialising");
         if(macos_run_ge("which iproxy")==0){
-            printf("Starting Device Proxy\n");
+            printf("[+] Starting Device Proxy\n");
             if(macos_run_ge("iproxy 7788 44 &")==0){
-                printf("Started Device Proxy\n");
+                printf("[+] Started Device Proxy\n");
             }
         } else{
-            printf("iProxy Not Found...Install Via Brew & Ensure PATH Entry\n");
+            printf("[-] iProxy Not Found...Install Via Brew & Ensure PATH Entry\n");
             exit(1);
         }
 
@@ -47,33 +47,33 @@ void dump_with_output_directory(char *outputDirectory) {
         if (ios_fetch_access("127.0.0.1", "7788") == 0) {
             //Tunnel To Device Is Open, Send Companion
             if (DEBUG == 1) {
-                printf("Mounting iDevice Disk...\n");
+                printf("[+] Mounting iDevice Disk...\n");
             }
             ios_run_ge("mount -o rw,union,update /");
-            printf("Ready...\n");
-            printf("Dumping Connected Device In Current State.\nThis may take some time...\n");
+            printf("[+] Ready...\n");
+            printf("[+] Dumping Connected Device In Current State.\n[+] This may take some time...\n");
 
             char commandBuffer[PATH_MAX];  
-            snprintf(commandBuffer, sizeof(commandBuffer), "cmake-build-debug/resources/sshpass -p alpine ssh -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@127.0.0.1 -p7788 'tar zcf - / 2>/dev/null' | cmake-build-debug/resources/pv > %s/filesystem.tar", outputDirectory);
+            snprintf(commandBuffer, sizeof(commandBuffer), "resources/sshpass -p alpine ssh -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@127.0.0.1 -p7788 'tar zcf - / 2>/dev/null' | resources/pv > %s/filesystem.tar", outputDirectory);
 
             system(commandBuffer);
-            printf("Complete! filesystem.tar available in 'SENSETIVE/'\n");
+            printf("[+] Complete! filesystem.tar available in 'SENSETIVE/'\n");
         } else{
-            printf("Stable Connection To Device Could Not Be Established.\n");
+            printf("[-] Stable Connection To Device Could Not Be Established.\n");
         }
     }
 }
 
 void dump_in_output_directory(char *outputDirectory) {
-    //check to see if the outputDirectory exists via openDir()
     DIR* dir = opendir(outputDirectory);
     if (dir) {
-        //closedir(dir);
-        printf("😈 Dumping root file system at directory: %s\n", outputDirectory);
+        printf("[+] Dumping root file system at directory: %s\n", outputDirectory);
         dump_with_output_directory(outputDirectory);
     } else if (ENOENT == errno) {
+        printf("[-] Directory provided is not valid");
         exit(1);
     }
+    closedir(dir);
 }
 
 void dump_with_current_directory() {
@@ -81,17 +81,17 @@ void dump_with_current_directory() {
     system("rm -rf SENSITIVE");
     if (mkdir("SENSITIVE", 0777) == -1) {
         clean_menu(0, "");
-        printf(" 1PRE-EXEC Check Failed -\> SENSETIVE Directory Already Exists And May Contain User Data.\nBackup & Remove SENSETIVE Directory Appropriately Before Executing...\n");
+        printf(" [-] PRE-EXEC Check Failed -> SENSETIVE Directory Already Exists And May Contain User Data.\n[-] Backup & Remove SENSETIVE Directory Appropriately Before Executing...\n");
         exit(1);
     } else {
         clean_menu(1, "Initialising1");
         if (macos_run_ge("which iproxy")==0) {
-            printf("Starting Device Proxy\n");
+            printf("[+] Starting Device Proxy\n");
             if(macos_run_ge("iproxy 7788 44 &")==0) {
-                printf("Started Device Proxy\n");
+                printf("[+] Started Device Proxy\n");
             }
         } else {
-            printf("iProxy Not Found...Install Via Brew & Ensure PATH Entry\n");
+            printf("[-] iProxy Not Found...Install Via Brew & Ensure PATH Entry\n");
             exit(1);
         }
 
@@ -101,16 +101,16 @@ void dump_with_current_directory() {
         if (ios_fetch_access("127.0.0.1", "7788") == 0) {
             //Tunnel To Device Is Open, Send Companion
             if (DEBUG == 1) {
-                printf("Mounting iDevice Disk...\n");
+                printf("[+] Mounting iDevice Disk...\n");
             }
             
             ios_run_ge("mount -o rw,union,update /");
-            printf("Ready...\n");
-            printf("Dumping Connected Device In Current State.\nThis may take some time...\n");
-            system("cmake-build-debug/resources/sshpass -p alpine ssh -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@127.0.0.1 -p7788 'tar zcf - / 2>/dev/null' | cmake-build-debug/resources/pv > SENSETIVE/filesystem.tar");
-            printf("Complete! filesystem.tar available in 'SENSETIVE/'\n");
+            printf("[+] Ready...\n");
+            printf("[+] Dumping Connected Device In Current State.\n[+] This may take some time...\n");
+            system("resources/sshpass -p alpine ssh -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@127.0.0.1 -p7788 'tar zcf - / 2>/dev/null' | resources/pv > SENSETIVE/filesystem.tar");
+            printf("[+] Complete! filesystem.tar available in 'SENSITIVE/'\n");
         } else {
-            printf("Stable Connection To Device Could Not Be Established.\n");
+            printf("[-] Stable Connection To Device Could Not Be Established.\n");
         }
     }
 }
@@ -118,9 +118,10 @@ void dump_with_current_directory() {
 void dump_in_current_directory() {
     char cwd[PATH_MAX];
     if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf("[+] Dumping rootfs in current working directory\n");
         dump_with_current_directory();
     } else {
-        printf("Error getting current working directory");
+        printf("[-] Error getting current working directory\n");
         exit(1);
    }
 }
@@ -134,12 +135,10 @@ int main(int argc, char *argv[]) {
                 dump_in_output_directory(optarg);
                 break;
             default:
-                //did not provide the output directory
                 exit(1);
             }
         }
     } else {
-        //if no arguments are provided, dump in the current working directory
        dump_with_current_directory();
     }
 
