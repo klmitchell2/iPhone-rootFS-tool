@@ -107,7 +107,7 @@ void dump_with_current_directory() {
             ios_run_ge("mount -o rw,union,update /");
             printf("[+] Ready...\n");
             printf("[+] Dumping Connected Device In Current State.\n[+] This may take some time...\n");
-            system("resources/sshpass -p alpine ssh -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@127.0.0.1 -p7788 'tar zcf - / 2>/dev/null' | resources/pv > SENSETIVE/filesystem.tar");
+            system("resources/sshpass -p alpine ssh -o \"UserKnownHostsFile=/dev/null\" -o \"StrictHostKeyChecking=no\" root@127.0.0.1 -p7788 'tar zcf - / 2>/dev/null' | resources/pv > SENSITIVE/filesystem.tar");
             printf("[+] Complete! filesystem.tar available in 'SENSITIVE/'\n");
         } else {
             printf("[-] Stable Connection To Device Could Not Be Established.\n");
