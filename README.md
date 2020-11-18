@@ -19,4 +19,4 @@
     - Generate archive with specified output directory: `./iPhone-rootFS-tool -o <Your Output Directory>`
 
 ## Build from source
-- Run: `gcc -o test main.c iLibX.c -o iPhone-rootFS-tool`
+- Run: `gcc main.c iLibX.c -o iPhone-rootFS-tool`
