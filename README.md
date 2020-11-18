@@ -1,4 +1,4 @@
-# iPhone-rootFS-tool
+# iPhone-RootFS-tool
 
 ## What does this tool do? 
 - iPhone-rootFS-Tool will transfer all of the directories and files of your iOS device root directory to your computer.
