@@ -15,8 +15,8 @@
 ## Installation & Usage
 - Clone this repository
 - Usage:
-    - Generate archive in current working directory: `./iPhone-RootFS-tool`
-    - Generate archive with specified output directory: `./iPhone-RootFS-tool -o <Your Output Directory>`
+    - Generate archive in current working directory: `./iPhone-rootFS-tool`
+    - Generate archive with specified output directory: `./iPhone-rootFS-tool -o <Your Output Directory>`
 
 ## Build from source
 - Run: `gcc -o test main.c iLibX.c -o iPhone-rootFS-tool`
